@@ -1,5 +1,4 @@
-How does HW Thread relate to logical cores? ChatGPT says that they are the same thing. "top-1" also suggests that this is the case since when HW Threads are all even numbered, even numbered logical cores are busy.
-One thing that boggles my mind is that I cannot set cpuset larger than 28 threads since likwid API says that I have 28 HW Threads in total, so I cannot use more than 28 HW Threads. However, my server has 56 cores, meanng that it should accommodate 56 threads with hyperthreading disabled.
+What likwid refers to as ```HWThread``` in the output is actually logical core numbers that threads are bound to.
 
 # How to build
 
@@ -15,7 +14,7 @@ If you omit ```LIKWID_PERFMON```, the Marker API calls resolve to an empty strin
 likwid-perfctr -C S0:0-27 -g L3 -m ./a.out
 ```
 
-This command invokes likwid-perfctr to invoke our executable and run it in parallel across 28 threads.
+This command invokes likwid-perfctr to invoke our executable and run it in parallel across 28 threads *only in socket-0*. Since even numbered cores are in socket-0, this run will only run even numbered cores. If we were to specify ```S1```, then odd numbered cores would be run.
 
 # Available event groups (performance groups)
 
